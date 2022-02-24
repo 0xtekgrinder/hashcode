@@ -19,7 +19,7 @@ class Contributor:
 def write_output(projects, mapping):
     with open('result.txt', 'w') as f:
         f.write(str(projects) + "\n")
-        for i in range(0, projects):
+        for i in range(0, len(mapping)):
             f.write([*mapping[i]][0] + "\n")
             for y in range(0, len(mapping[i][[*mapping[i]][0]])):
                 if (y != len(mapping[i][[*mapping[i]][0]]) - 1):
@@ -31,8 +31,11 @@ def write_output(projects, mapping):
 def compute(projects, contributors):
     result = []
     i = 0
+    done = 0
+    overall = 0
 
-    while (i < len(projects)):
+    while (i < len(projects) and overall < 100000):
+        overall += 1
         contrib = []
         original = projects[i]
         y = 0
@@ -49,10 +52,11 @@ def compute(projects, contributors):
                 projects.append(projects.pop(i))
                 i -= 1
                 break
+            done += 1
         contrib = list(dict.fromkeys(contrib))
         result.append({projects[i].name: contrib})
         i += 1
-    return result
+    return result, done
 
 def main(argv):
     with open(argv[0], 'r') as f:
@@ -89,8 +93,8 @@ def main(argv):
         projects.append(Project(name, duration, reward, best_before, nb_roles, skills))
         count += 1
 
-    result = compute(projects, contributors)
-    write_output(nb_contributors, result)
+    result, done = compute(projects, contributors)
+    write_output(done, result)
 
 if __name__ == '__main__':
     main(sys.argv[1:])
