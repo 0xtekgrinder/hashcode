@@ -1,3 +1,7 @@
+#!/usr/bin/python3
+
+import sys
+
 class Project:
     def __init__(self, name, duration, award, best_before, requirements):
         self.name = name
@@ -16,7 +20,6 @@ def write_output(projects, mapping):
         f.write(str(projects) + "\n")
         for i in range(0, projects):
             f.write([*mapping[i]][0] + "\n")
-            print(mapping[i][[*mapping[i]][0]])
             for y in range(0, len(mapping[i][[*mapping[i]][0]])):
                 if (y != len(mapping[i][[*mapping[i]][0]]) - 1):
                     f.write(mapping[i][[*mapping[i]][0]][y] + " ")
@@ -24,8 +27,8 @@ def write_output(projects, mapping):
                     f.write(mapping[i][[*mapping[i]][0]][y] + "\n")
         f.close()
 
-def main():
-    with open('a_an_example.in.txt', 'r') as f:
+def main(argv):
+    with open(argv[0], 'r') as f:
         buffer = f.readlines()
         f.close()
     nb_contributors =  int(buffer[0].split()[0])
@@ -62,4 +65,4 @@ def main():
     write_output(3, [{"google": ["maria", "me"]}, {"google": ["maria", "me"]}, {"google": ["maria", "me"]}])
 
 if __name__ == '__main__':
-    main()
+    main(sys.argv[1:])
