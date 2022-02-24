@@ -27,6 +27,20 @@ def write_output(projects, mapping):
                     f.write(mapping[i][[*mapping[i]][0]][y] + "\n")
         f.close()
 
+def compute(projects, contributors):
+    result = []
+
+    for i in range(len(projects)):
+        contrib = []
+        for y in range(len(list(projects[i].requirements))):
+            for x in range(len(contributors)):
+                if ([*projects[i].requirements][y] in list(contributors[x].abilities)):
+                    if (projects[i].requirements[[*projects[i].requirements][y]] > 0):
+                        projects[i].requirements[[*projects[i].requirements][y]] -= contributors[x].abilities[[*projects[i].requirements][y]]
+                        contrib.append(contributors[x].name)
+        result.append({projects[i].name: contrib})
+    return result
+
 def main(argv):
     with open(argv[0], 'r') as f:
         buffer = f.readlines()
@@ -61,8 +75,9 @@ def main(argv):
             count += 1
         projects.append(Project(name, duration, reward, best_before, skills))
         count += 1
-    
-    write_output(3, [{"google": ["maria", "me"]}, {"google": ["maria", "me"]}, {"google": ["maria", "me"]}])
+
+    result = compute(list(reversed(projects)), contributors)
+    write_output(nb_contributors, result)
 
 if __name__ == '__main__':
     main(sys.argv[1:])
